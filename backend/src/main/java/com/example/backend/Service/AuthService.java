@@ -168,9 +168,9 @@ public class AuthService {
             body.put("accessToken", accessToken);
             body.put("user", Map.of(
                     "id", user.getId(), // Nên trả về ID để Frontend dùng
-                    "email", user.getEmail(),
-                    "userName", user.getUserName(),
-                    "role", user.getRole()
+                    "email", user.getEmail()
+                 //   "userName", user.getUserName(),
+                  //  "role", user.getRole()
             ));
 
             return body;
