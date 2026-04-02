@@ -16,7 +16,7 @@
                 <div class="h-12" />
                 <div class="flex flex-col gap-6 items-center">
                 <div class="w-full px-4">
-                    <NuxtImg src="/logoHat.png" format="webp" quality="70" class="rounded-lg w-30 mt-4 mx-auto" preload />
+                    <NuxtImg :src="icon" format="webp" quality="70" class="rounded-lg w-30 mt-4 mx-auto" preload />
                 </div>
                 <div class="flex flex-col gap-2">
                     <div v-for="(section, id) in sidebarOptions" :key="id">
@@ -36,6 +36,7 @@
 </template>
 <script setup lang="ts">
 import { sidebarOptions } from '~/constants/sidebar';
+import { icon } from '~/constants/logos'
 const { sidebarOpen, toggleSidebarOpen } = useSidebar();
 
 

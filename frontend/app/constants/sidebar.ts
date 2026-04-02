@@ -10,13 +10,8 @@ export const sidebarOptions = [
         path: '/dashboard/students'
     },
     {
-        name: 'Quản lý Tiêu chí',
+        name: 'Quản lý Học Bổng',
         icon: 'i-heroicons-clipboard-document-check-solid',
-        path: ''
-    },
-    {
-        name: 'Danh sách 5 Tốt',
-        icon: 'i-heroicons-trophy-solid',
         path: ''
     },
     {

@@ -4,7 +4,7 @@
         <div :class="['fixed h-screen top-0 left-0 p-2 transition-all', sidebarOpen ? 'w-50' : 'w-20']">
             <div class="size-full bg-info-300 flex flex-col gap-6 rounded-lg items-center shadow-xl overflow-hidden">
                 <div class="w-full px-4">
-                    <NuxtImg src="/logoHat.png" format="webp" quality="70" class="rounded-lg w-full max-w-30 mt-4 mx-auto" preload />
+                    <NuxtImg :src="icon" format="webp" quality="70" class="rounded-lg w-full max-w-30 mt-4 mx-auto" preload />
                 </div>
                 <div class="flex flex-col gap-2">
                     <div v-for="(section, id) in sidebarOptions" :key="id">
@@ -27,6 +27,7 @@ class="group absolute h-full w-2 py-2 right-0 top-0 cursor-pointer"
 </template>
 <script setup lang="ts">
 import { sidebarOptions } from '~/constants/sidebar';
+import { icon } from '~/constants/logos';
 
 const { sidebarOpen, toggleSidebarOpen } = useSidebar()
 

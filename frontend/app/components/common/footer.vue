@@ -2,7 +2,7 @@
     <div class="w-full bg-gray-300 rounded-t-lg p-4 grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-10">
         <div class="flex flex-col gap-6">
             <div class="flex items-center">
-                <NuxtImg src="/logoHat.png" format="webp" quality="70" class="size-14" />
+                <NuxtImg :src="icon" format="webp" quality="70" class="size-14" />
                 <h2 class="text-info text-3xl font-bold ml-2">ScholarHub</h2>
             </div>
             <p>Hệ thống quản lý sinh viên toàn diện, giúp theo dõi học tập, rèn luyện và phát triển kỹ năng.</p>
@@ -38,6 +38,7 @@ v-for="link in col" :key="link.label" color="neutral" variant="link" :label="lin
     </div>
 </template>
 <script setup lang="ts">
+import { icon } from '~/constants/logos';
 
 const INFOS = [
     {

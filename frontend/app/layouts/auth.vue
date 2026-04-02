@@ -5,7 +5,7 @@
         <slot />
       </div>
       <div class="size-full">
-        <NuxtImg :src="BANNER_AUTH" class="object-cover size-full" format="webp" quality="100" alt="banner" />
+        <NuxtImg :src="banner" class="object-cover size-full" format="webp" quality="100" alt="banner" />
       </div>
     </div>
     <div class="flex md:hidden justify-center items-center h-screen">
@@ -17,6 +17,5 @@
 </template>
 
 <script setup lang="ts">
-
-const BANNER_AUTH = 'authBanner.jpg' 
+import { banner } from '~/constants/logos';
 </script>
