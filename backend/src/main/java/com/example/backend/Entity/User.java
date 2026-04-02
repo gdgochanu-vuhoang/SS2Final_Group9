@@ -31,12 +31,7 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "user_name", nullable = false, unique = true, length = 100)
-    private String userName;
-
-    @Column(nullable = false, unique = true, length = 100)
-    private String email;
-
+    // --- Hệ thống & Bảo mật ---
     @Column(name = "password_hash", nullable = false, length = 255)
     private String userPassword;
 
@@ -45,33 +40,6 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role = Role.USER;
 
-    private String avatar;
-
-    @Column(name = "phone_number", length = 20)
-    private String phoneNumber;
-
-    private String ethnicity;
-
-    @Enumerated(EnumType.STRING)
-    private Gender gender;
-
-    @Column(name = "birth_day")
-    private LocalDate birthDay;
-
-    @Column(columnDefinition = "TEXT")
-    private String address;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "faculty_id")
-    private Faculty faculty;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "class_id")
-    private Classes clazz;
-
-    @Column(name = "student_code", length = 50)
-    private String studentCode;
-
     @Column(name = "is_verified")
     @Builder.Default
     private boolean isVerified = true;
@@ -79,6 +47,9 @@ public class User implements UserDetails {
     @Column(name = "is_active")
     @Builder.Default
     private boolean isActive = true;
+
+    @Column(name = "ethnicity") // Giữ lại từ code cũ
+    private String ethnicity;
 
     @Column(name = "created_at", updatable = false)
     @CreationTimestamp
@@ -94,9 +65,62 @@ public class User implements UserDetails {
     @Column(name = "updated_by", length = 100)
     private String updatedBy;
 
-    public String getUserName() {
-        return this.userName;
-    }
+
+
+    @Column(name = "f_name", nullable = false, length = 100)
+    private String f_Name;
+
+    @Column(name = "l_name", nullable = false, length = 100)
+    private String l_name;
+
+
+    @Enumerated(EnumType.STRING)
+    private Gender gender; // Giới tính
+
+    @Column(name = "birth_day")
+    private LocalDate birthDay; // Ngày sinh
+
+    private String avatar; // Ảnh đại diện
+
+    @Column(nullable = false, unique = true, length = 100)
+    private String email; // Email
+
+    @Column(name = "phone_number", length = 20)
+    private String phoneNumber; // Số điện thoại
+
+    @Column(columnDefinition = "TEXT")
+    private String address; // Địa chỉ hiện tại
+
+    @Column(name = "city", length = 100)
+    private String city; // Tỉnh / Thành phố
+
+    @Column(name = "citizen_id", length = 20, unique = true)
+    private String citizenId; // CCCD
+
+    @Column(name = "student_code", length = 50)
+    private String studentCode; // Mã học sinh / sinh viên
+
+    @Column(name = "school_name")
+    private String schoolName; // Trường đang học
+
+    @Column(name = "education_level")
+    private String educationLevel; // Bậc học (VD: Đại học, Cao đẳng)
+
+    @Column(name = "major")
+    private String major; // Chuyên ngành (Thay thế/bổ sung cho faculty)
+
+    @Column(name = "classes", length = 20)
+    private String classes; // Lớp
+
+    @Column(name = "academic_year")
+    private String academicYear; // Niên khóa (VD: 2020-2024)
+
+    @Column(name = "enrollment_year")
+    private String enrollmentYear; // Năm nhập học
+
+    @Column(name = "graduation_year")
+    private String graduationYear; // Năm dự kiến tốt nghiệp
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
