@@ -2,8 +2,7 @@
   <div class="flex flex-col lg:flex-row-reverse gap-x-10 gap-y-10 h-full">
     <ProfileEditFloaterBox class="w-full lg:w-80 lg:sticky shrink-0 top-16 self-start" />
 
-    <div class="w-full">
-      <UForm :state="form" class="w-full" @submit="onSubmit">
+      <UForm :state="form" class="w-full flex flex-col gap-10" @submit="onSubmit">
         <CommonPageSection title="Thông tin Cá nhân" title-icon="i-heroicons-user-solid">
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
@@ -35,7 +34,7 @@
             </UFormField>
 
             <UFormField label="Nơi ở hiện tại (Residence)" name="residence" class="md:col-span-2" >
-              <UTextarea v-model="form.residence" placeholder="Địa chỉ chi tiết..." :rows="2" class="w-full" />
+              <UTextarea v-model="form.residence" placeholder="Địa chỉ chi tiết..." :rows="2" class="w-full" autoresize />
             </UFormField>
 
           </div>
@@ -73,7 +72,6 @@
           <UButton type="submit" color="info" icon="i-heroicons-check">Lưu thông tin</UButton>
         </div>
       </UForm>
-    </div>
   </div>
 </template>
 
