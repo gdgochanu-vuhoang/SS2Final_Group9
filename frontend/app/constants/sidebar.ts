@@ -16,5 +16,11 @@ export const sidebarOptions = [
         icon: 'i-heroicons-users-solid',
         path: '/dashboard/admin/manage-students',
         admin: true
-    }
+    },
+    {
+        name: 'Manage Applications',
+        icon: 'i-heroicons-clipboard-document-solid',
+        path: '/dashboard/admin/manage-applications',
+        admin: true
+    },
 ]

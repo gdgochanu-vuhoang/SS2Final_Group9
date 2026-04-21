@@ -1,6 +1,24 @@
 <template>
-    <div>
-        <Transition 
+    <div class="flex flex-col gap-10">
+        <CommonPageSection>
+            Filtering for 
+        </CommonPageSection>
+        <CommonPageSection v-if="data && data.length">
+            <UTable :columns="columns" :data="data" class="w-full">
+                <template #index-cell="{ row }">
+                    <span class="text-gray-500 font-medium">{{ row.index + 1 }}</span>
+                </template>
+
+                <template #actions-cell="{ row }">
+                    <div class="flex justify-end">
+                        <UButton icon="i-heroicons-eye" color="info" label="Select" class="cursor-pointer" @click="() => { 
+                            curRow = row.original
+                            isOpen = true
+                         }" />
+                    </div>
+                </template>
+            </UTable>
+            <Transition 
             enter-from-class="opacity-0" enter-active-class="transition-opacity duration-300 ease-out"
             enter-to-class="opacity-100" leave-active-class="transition-opacity duration-300 ease-in"
             leave-to-class="opacity-0">
@@ -9,74 +27,57 @@
                     <template #titleTrailing>
                         <UButton icon="i-heroicons-x-mark-solid" color="info" variant="ghost" class="ml-auto cursor-pointer" :ui="{base: 'p-0', leadingIcon: 'bg-white size-10'}" @click="() => {isOpen = false}" />
                     </template>
-                    <UForm :state="formState" class="flex flex-col gap-8 w-full" @submit="handleSubmit">
+                    <UForm class="flex flex-col gap-8 w-full">
                         <div v-for="section in formSections" :key="section.title" class="w-full flex flex-col">
                             <h3 class="text-info font-bold text-lg mb-4">{{ section.title }}</h3>
                             <div class="grid grid-cols-2 lg:grid-cols-3 gap-x-4 md:gap-x-8 gap-y-4 w-full">
                             <UFormField v-for="field in section.fields" :key="field.label" :label="field.label" class="w-full">
-                                <UInput v-model="formState[section.key][field.key]" class="w-full" />
+                                <UInput v-model="curRow[section.key][field.key]" class="w-full" disabled />
                             </UFormField>
                             </div>
                         </div>
-                        <UButton label="Submit" class="w-max ml-auto cursor-pointer" color="info" size="xl" type="submit" />
                     </UForm>
                 </CommonPageSection>
                 <div class="absolute bg-black/60 size-full inset-0 bg-black-60" @click="() => {isOpen = false}" />
             </div>
         </Transition>
-        <UButton class="justify-center cursor-pointer h-10 w-full" color="info" label="Apply" @click="handleOpen" />
+        </CommonPageSection>
+        <CommonPageEmpty v-else />
     </div>
 </template>
 <script setup lang="ts">
-import { useScholarshipApply } from '~/composables/scholarship/useScholarshipApply';
+import { useApplicationList } from '~/composables/application/useApplicationList';
+import type { Tables } from '~/types/database.types';
+
 
 const route = useRoute()
-const toast = useToast()
 
-const { isLoading, isUnique, scholarshipApply } = await useScholarshipApply(route.params.id!.toString())
-
+const curRow = ref<Tables<"applications"> | null>()
 const isOpen = ref<boolean>(false)
-const handleOpen = () => {
-    if (!isUnique.data.value) {
-        isOpen.value = false
-        toastNotUnique()
-        return
-    }
-    isOpen.value = !isOpen.value   
-}
 
-const handleSubmit = async () => {
-    if (!isUnique) {
-        return
-    }
-    await scholarshipApply(formState)
-    isOpen.value = false
-}
 
-const toastNotUnique = () => {
-    toast.add({
-        title: 'Account already applied for this scholarship',
-        description: 'Contact admin for further information!',
-        color: 'error'
-    })
-}
+const { listByScholarship } = await useApplicationList()
 
-const formState = reactive({
-    study_info: {
-        gpa: '',
-        accumulated_credits: '',
+const { data } = await listByScholarship(route.params.id!.toString())
+
+const columns: TableColumn[] = [
+    {
+        id: 'index',
+        header: '#'
     },
-    extra_curricular: {
-        club_activity: '',
-        time_active: '',
-        role: '',
+    {
+        accessorKey: 'user_id',
+        header: 'Applicant Id'
     },
-    family_backgr_info: {
-        father_job: '',
-        mother_job: '',
-        avg_income: ''
+    {
+        accessorKey: 'status',
+        header: 'Status'
+    },
+    {
+        id: 'actions',
+        header: ''
     }
-})
+]
 
 const formSections = ref([
     {
@@ -89,7 +90,7 @@ const formSections = ref([
             },
             {
                 label: 'Accumulated Credits',
-                key: 'accumulated_credits',
+                key: 'accumulated_credit',
             }
         ]
     },

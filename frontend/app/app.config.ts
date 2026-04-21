@@ -13,5 +13,10 @@ export default defineAppConfig({
         color: 'info',
       },
     },
+    button: {
+      defaultVariants: {
+        color: 'info'
+      }
+    }
   },
 })
