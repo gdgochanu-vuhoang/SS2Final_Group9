@@ -5,7 +5,7 @@ export default defineAppConfig({
       variants: {
         size: {
           md: {
-            base: 'text-base w-full',
+            base: 'text-base w-full bg-gray-100 text-black',
           },
         },
       },
@@ -13,10 +13,25 @@ export default defineAppConfig({
         color: 'info',
       },
     },
+    inputNumber: {
+      defaultVariants: {
+        color: 'info',
+      },
+    },
     button: {
       defaultVariants: {
-        color: 'info'
-      }
-    }
+        color: 'info',
+      },
+    },
+    textarea: {
+      defaultVariants: {
+        color: 'info',
+      },
+    },
+    select: {
+      defaultVariants: {
+        color: 'info',
+      },
+    },
   },
 })
