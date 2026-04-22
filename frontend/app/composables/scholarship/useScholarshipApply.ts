@@ -4,7 +4,7 @@ export const useScholarshipApply = async (sid: string) => {
     const supabase = useSupabaseClient()
     const toast = useToast()
     const isLoading = ref<boolean>(false)
-    const { data: curUser } = useNuxtData<Tables<"profiles">>('userDetail')
+    const { data: curUser } = useNuxtData<Tables<"profiles">>('user-detail')
 
     const checkUnique = async () => {
         isLoading.value = true

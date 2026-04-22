@@ -3,7 +3,7 @@ import type { Tables } from "~/types/database.types"
 export default defineNuxtRouteMiddleware((to) => {
 
     const loggedIn = useSupabaseUser()
-    const { data: curUser } = useNuxtData<Tables<"profiles">>('userDetail')
+    const { data: curUser } = useNuxtData<Tables<"profiles">>('user-detail')
 
 
     if (to.path === '/') {
@@ -21,7 +21,7 @@ export default defineNuxtRouteMiddleware((to) => {
     }
 
     if (to.path.startsWith('/dashboard/admin')) {
-        if (curUser.value?.role != 'Admin') {
+        if (curUser.value?.role != 'ADMIN') {
             if (!loggedIn.value) { return navigateTo('/login?status=unauthorized') }
             return navigateTo('/dashboard')
 

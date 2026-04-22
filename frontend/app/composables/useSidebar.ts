@@ -2,7 +2,7 @@ import { sidebarOptions } from '~/constants/sidebar';
 import type { Tables } from '~/types/database.types';
 
 export const useSidebar = () => {
-    const { data: curUser } = useNuxtData<Tables<"profiles">>('userDetail')
+    const { data: curUser } = useNuxtData<Tables<"profiles">>('user-detail')
 
     const sidebarOpen = useState<boolean>(() => true)
 
@@ -11,7 +11,7 @@ export const useSidebar = () => {
     }, 700)
 
     const authorizedSidebarOptions = computed(() => {
-        const isAdmin = curUser?.value?.role === 'Admin'
+        const isAdmin = curUser?.value?.role === 'ADMIN'
 
         return sidebarOptions.filter((section) => {
             if (isAdmin) return true;
