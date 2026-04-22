@@ -6,16 +6,15 @@ class="flex flex-col gap-6 w-full px-6 xl:px-16 pt-10" :state="registerPayloadSt
       Đăng Ký
     </p>
     <UFormField label="Email" name="email" :ui="{ label: 'text-lg' }">
-        <UInput
+      <UInput
 v-model="registerPayloadState.email" class="w-full" color="neutral" placeholder="Nhập email..."
-          :ui="{ base: 'bg-gray-100 h-10 text-black' }" autocomplete="email" />
+        :ui="{ base: 'bg-gray-100 h-10 text-black' }" autocomplete="email" />
     </UFormField>
-    <UFormField class="group" label="Mật Khẩu" name="userPassword" :ui="{ label: 'text-lg' }">
+    <UFormField class="group" label="Mật Khẩu" name="password" :ui="{ label: 'text-lg' }">
       <CommonPopper>
         <UInput
-v-model="registerPayloadState.userPassword" class="w-full" color="neutral"
-          placeholder="Nhập mật khẩu..." :ui="{ base: 'bg-gray-100 h-10 text-black' }"
-          :type="passwordShow ? 'text' : 'password'">
+v-model="registerPayloadState.password" class="w-full" color="neutral" placeholder="Nhập mật khẩu..."
+          :ui="{ base: 'bg-gray-100 h-10 text-black' }" :type="passwordShow ? 'text' : 'password'">
           <template #trailing>
             <UButton
 class="cursor-pointer" color="neutral" variant="link" size="sm"
@@ -58,7 +57,6 @@ class="h-10 cursor-pointer" color="info" label="Đăng Ký"
 <script setup lang="ts">
 import { z } from 'zod'
 import { REQS } from '~/constants/passwordRequirements'
-import type { RegisterPayload } from '~/types/auth'
 
 definePageMeta({
   layout: 'auth',
@@ -69,10 +67,10 @@ const isLoading = ref<boolean>(false)
 const schema =
   z.object({
     email: z.email('Email không hợp lệ!'),
-    userPassword: z.string().min(8, 'Mật khẩu phải có ít nhất 8 kí tự!'),
+    password: z.string().min(8, 'Mật khẩu phải có ít nhất 8 kí tự!'),
     confirmPassword: z.string()
   })
-    .refine((data) => data.userPassword === data.confirmPassword, {
+    .refine((data) => data.password === data.confirmPassword, {
       message: 'Mật khẩu xác nhận không khớp với mật khẩu ban đầu!',
       path: ['confirmPassword']
     })
@@ -87,9 +85,9 @@ const handleRegister = async () => {
   isLoading.value = false
 }
 
-const registerPayloadState = reactive<RegisterPayload & { confirmPassword: string }>({
+const registerPayloadState = reactive<{ email: string, password: string, confirmPassword: string }>({
   email: '',
-  userPassword: '',
+  password: '',
   confirmPassword: '',
 })
 

@@ -5,10 +5,10 @@ class="flex flex-col gap-6 w-full px-6 xl:px-16" :state="resetPasswordPayloadSta
     <p class="text-4xl text-info-500 font-bold text-center">
       Đặt Lại Mật Khẩu
     </p>
-    <UFormField v-if="!resetPasswordTokenTimedout" label="Mật Khẩu Mới" name="newPw" :ui="{ label: 'text-lg' }">
+    <UFormField v-if="user" label="Mật Khẩu Mới" name="password" :ui="{ label: 'text-lg' }">
       <CommonPopper>
         <UInput
-v-model="resetPasswordPayloadState.newPw" class="w-full" color="neutral"
+v-model="resetPasswordPayloadState.password" class="w-full" color="neutral"
           placeholder="Nhập mật khẩu mới..." :ui="{ base: 'bg-gray-100 h-10 text-black' }"
           :type="passwordShow ? 'text' : 'password'">
           <template #trailing>
@@ -27,7 +27,7 @@ class="cursor-pointer" color="neutral" variant="link" size="sm"
       </CommonPopper>
     </UFormField>
     <UFormField
-v-if="!resetPasswordTokenTimedout" label="Xác Nhận Mật Khẩu Mới" name="confirmPassword"
+v-if="user" label="Xác Nhận Mật Khẩu Mới" name="confirmPassword"
       :ui="{ label: 'text-lg' }">
       <UInput
 v-model="resetPasswordPayloadState.confirmPassword" class="w-full" color="neutral"
@@ -43,7 +43,7 @@ class="cursor-pointer" color="neutral" variant="link" size="sm"
       </UInput>
     </UFormField>
     <UButton
-v-if="!resetPasswordTokenTimedout" class="h-10 cursor-pointer" color="info" label="Tiếp Tục"
+v-if="user" class="h-10 cursor-pointer" color="info" label="Tiếp Tục"
       :loading="isLoading" :ui="{ label: ['mx-auto text-lg', isLoading && 'hidden'], leadingIcon: 'mx-auto' }"
       type="submit" />
     <p v-else class="text-center">Yêu cầu đã hết hạn! <br> Hãy tạo yêu cầu đổi mật khẩu mới.</p>
@@ -51,43 +51,37 @@ v-if="!resetPasswordTokenTimedout" class="h-10 cursor-pointer" color="info" labe
   </UForm>
 </template>
 <script setup lang="ts">
-import type { ResetPasswordPayload } from '~/types/auth'
 import { z } from 'zod'
 import { REQS } from '~/constants/passwordRequirements'
 
 definePageMeta({
-  layout: 'auth',
-  middleware: 'require-reset-password-token'
+  layout: 'auth'
 })
 
-const route = useRoute()
+const user = useSupabaseUser();
 
 const isLoading = ref<boolean>(false)
 
 const schema = z
   .object({
-    newPw: z.string().min(8, 'Mật khẩu phải có ít nhất 8 kí tự!'),
+    password: z.string().min(8, 'Mật khẩu phải có ít nhất 8 kí tự!'),
     confirmPassword: z.string()
   })
-  .refine((data) => data.newPw === data.confirmPassword, {
+  .refine((data) => data.password === data.confirmPassword, {
     message: 'Mật khẩu xác nhận không khớp với mật khẩu ban đầu!',
     path: ['confirmPassword']
   })
-
-const resetPasswordTokenTimedout = useState('resetPasswordTokenTimedout')
 
 const { resetPassword } = useAuth()
 
 const handleResetPassword = async () => {
   isLoading.value = true
-  const { confirmPassword, ...apiPayload } = resetPasswordPayloadState
-  await resetPassword(apiPayload)
+  await resetPassword(resetPasswordPayloadState.password)
   isLoading.value = false
 }
 
-const resetPasswordPayloadState = reactive<ResetPasswordPayload & { confirmPassword: string }>({
-  token: route.query.token as string,
-  newPw: '',
+const resetPasswordPayloadState = reactive<{password: string, confirmPassword: string }>({
+  password: '',
   confirmPassword: ''
 })
 

@@ -21,11 +21,11 @@
     </UFormField>
     <UFormField
       label="Mật Khẩu"
-      name="userPassword"
+      name="password"
       :ui="{ label: 'text-lg' }"
     >
       <UInput
-        v-model="logInPayloadState.userPassword"
+        v-model="logInPayloadState.password"
         class="w-full"
         color="neutral"
         placeholder="Nhập mật khẩu..."
@@ -78,7 +78,6 @@
 
 </template>
 <script setup lang="ts">
-import type { LogInPayload } from '~/types/auth';
 import { z } from 'zod';
 
 definePageMeta({
@@ -93,7 +92,7 @@ const isLoading = ref<boolean>(false)
 
 const schema = z.object({
   email: z.email('Email không hợp lệ!'),
-  userPassword: z.string().min(1, 'Vui lòng nhập mật khẩu!')
+  password: z.string().min(1, 'Vui lòng nhập mật khẩu!')
 })
 
 const { logIn } = useAuth()
@@ -106,9 +105,9 @@ const handleLogIn = async () => {
 
 const passwordShow = ref<boolean>(false)
 
-const logInPayloadState = reactive<LogInPayload>({
+const logInPayloadState = reactive<{email: string, password: string}>({
   email: '',
-  userPassword: ''
+  password: ''
 })
 
 

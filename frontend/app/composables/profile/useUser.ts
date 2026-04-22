@@ -4,7 +4,7 @@ export const useUser = async () => {
 
   if (!user) return { curUser: ref(null) }
 
-  const userKey = computed(() => {return 'userDetail'})
+  const userKey = computed(() => {return 'user-detail'})
 
   const { data: curUser } = await useAsyncData(
     userKey,

@@ -1,5 +1,3 @@
-import type { LogInPayload, RegisterPayload, ResetPasswordPayload } from "~/types/auth"
-
 export const useAuth = () => {
 
     const supabase = useSupabaseClient();
@@ -8,13 +6,13 @@ export const useAuth = () => {
 
     const siteUrl = useRequestURL().origin
 
-    const logIn = async (payload: LogInPayload) => {
+    const logIn = async (payload: { email: string, password: string }) => {
         const { error } = await supabase.auth.signInWithPassword({
             email: payload.email,
-            password: payload.userPassword
+            password: payload.password
         })
 
-        if ( error ) {
+        if (error) {
             toast.add({
                 title: 'Đăng nhập thất bại!',
                 description: error.message,
@@ -23,7 +21,7 @@ export const useAuth = () => {
             return
         }
 
-        if ( !user.value ) {
+        if (!user.value) {
             await new Promise<void>((resolve) => {
                 const unwatch = watch(user, (newUser) => {
                     if (newUser) {
@@ -45,9 +43,7 @@ export const useAuth = () => {
     const logOut = async () => {
         const { error } = await supabase.auth.signOut()
 
-        clearNuxtData((key) => key.startsWith('current-profile-'))
-
-        if ( error ) {
+        if (error) {
             toast.add({
                 title: 'Đăng xuất thất bại!',
                 description: error.message,
@@ -59,10 +55,10 @@ export const useAuth = () => {
         return navigateTo('/login')
     }
 
-    const register = async (payload: RegisterPayload) => {
+    const register = async (payload: { email: string, password: string }) => {
         const { error } = await supabase.auth.signUp({
             email: payload.email,
-            password: payload.userPassword,
+            password: payload.password,
             options: {
                 emailRedirectTo: `${siteUrl}/auth/callback`,
                 data: {
@@ -71,7 +67,7 @@ export const useAuth = () => {
             }
         })
 
-        if ( error ) {
+        if (error) {
             toast.add({
                 title: 'Đăng ký thất bại!',
                 description: error.message,
@@ -84,60 +80,46 @@ export const useAuth = () => {
     }
 
     const missingPassword = async (email: string) => {
-        try {
-            const { data } = await $fetch<ApiResponse>(MissingPasswordEndpoint, {
-                method: 'POST',
-                query: { email }
-            })
+        const { error } = await supabase.auth.resetPasswordForEmail(email, {
+            redirectTo: `${siteUrl}/reset_password`,
+        })
 
+        if (error) {
             toast.add({
-                title: 'Đã gửi mail!',
-                description: `Hướng dẫn phục hồi tài khoản đã được gửi về ${email}`
-            })
-            return data
-        } catch {
-            toast.add({
-                title: 'Gửi mail thất bại!',
-                description: 'Vui lòng thử lại sau.',
+                title: 'Cập nhật thất bại!',
+                description: error.message,
                 color: 'error'
             })
-            return false
+            return
         }
+
+        toast.add({
+            title: 'Vui lòng kiểm tra email để tiếp tục!',
+            color: 'success'
+        })
     }
 
-    const resetPassword = async (payload: ResetPasswordPayload) => {
-        try {
-            const { message, data } = await $fetch<ApiResponse>(ResetPasswordEndpoint, {
-                method: 'POST',
-                body: payload
-            })
+    const resetPassword = async (new_password: string) => {
+        const { error } = await supabase.auth.updateUser({
+            password: new_password
+        })
 
+        if (error) {
             toast.add({
-                title: 'Thay đổi mật khẩu thành công!',
-                description: message
-            })
-            return data
-        } catch {
-            toast.add({
-                title: 'Thay đổi mật khẩu thất bại!',
-                description: 'Vui lòng thử lại sau.',
+                title: 'Đổi mật khẩu thất bại!',
+                description: error.message,
                 color: 'error'
             })
+            return
         }
-    }
 
-    const verifyResetToken = async (token: string) => {
-        try {
-            await $fetch<ApiResponse>(VerifyResetEndpoint, {
-                method: 'GET',
-                query: { token: token }
-            })
-            return true
-        } catch {
-            return false
-        }
+        toast.add({
+            title: 'Đổi mật khẩu thành công!',
+            color: 'success'
+        })
+        return navigateTo('/dashboard')
     }
 
 
-    return { logIn, logOut, register, missingPassword, resetPassword, verifyResetToken }
+    return { logIn, logOut, register, missingPassword, resetPassword }
 }
