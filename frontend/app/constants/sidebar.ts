@@ -15,24 +15,24 @@ export const sidebarOptions = [
         name: 'Quản lý Sinh viên',
         icon: 'i-heroicons-users-solid',
         path: '/dashboard/admin/manage-students',
-        admin: true
+        roles: ['ADMIN']
     },
     {
         name: 'Manage Applications',
         icon: 'i-heroicons-clipboard-document-solid',
         path: '/dashboard/admin/manage-applications',
-        admin: true
+        roles: ['ADMIN', 'ORGANIZER']
     },
     {
         name: 'Manage Scholarships',
         icon: 'i-heroicons-clipboard-document-solid',
         path: '/dashboard/admin/manage-scholarships',
-        admin: true
+        roles: ['ADMIN', 'ORGANIZER']
     },
     {
         name: 'Manage Organizers',
         icon: 'i-heroicons-users-solid',
         path: '/dashboard/admin/manage-organizers',
-        admin: true
+        roles: ['ADMIN']
     },
 ]

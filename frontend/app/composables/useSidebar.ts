@@ -11,11 +11,13 @@ export const useSidebar = () => {
     }, 700)
 
     const authorizedSidebarOptions = computed(() => {
-        const isAdmin = curUser?.value?.role === 'ADMIN'
+        const userRole = curUser?.value?.role
 
-        return sidebarOptions.filter((section) => {
-            if (isAdmin) return true;
-            return !section.admin;
+        return sidebarOptions.filter((option) => {
+            if (!option.roles || option.roles.length === 0) {
+                return true
+            }
+            return userRole && option.roles.includes(userRole)
         })
     })
 

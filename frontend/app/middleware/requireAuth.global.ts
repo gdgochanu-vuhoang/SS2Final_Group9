@@ -20,6 +20,7 @@ export default defineNuxtRouteMiddleware((to) => {
     }
 
     if (to.path.startsWith('/dashboard/admin')) {
+        if (curUser.value?.role === 'ORGANIZER') return
         if (curUser.value?.role != 'ADMIN') {
             if (!loggedIn.value) { return navigateTo('/login?status=unauthorized') }
             return navigateTo('/dashboard')
