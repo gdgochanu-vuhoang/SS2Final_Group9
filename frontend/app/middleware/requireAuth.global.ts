@@ -5,7 +5,6 @@ export default defineNuxtRouteMiddleware((to) => {
     const loggedIn = useSupabaseUser()
     const { data: curUser } = useNuxtData<Tables<"profiles">>('user-detail')
 
-
     if (to.path === '/') {
         if (!loggedIn.value) {
             return navigateTo('/login')

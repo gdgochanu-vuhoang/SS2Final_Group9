@@ -1,43 +1,61 @@
+<template>
+    <div class="flex items-center justify-center min-h-screen">
+        <UCard>
+            <div class="flex flex-col items-center gap-4">
+                <UIcon name="i-heroicons-arrow-path" class="animate-spin text-4xl text-info" />
+                <p class="text-lg font-medium">Authenticating your invitation...</p>
+            </div>
+        </UCard>
+    </div>
+</template>
+
 <script setup lang="ts">
-import { useRouter } from 'vue-router'
 definePageMeta({
-  layout: false
+    layout: false,
+    middleware: undefined
 })
 
-const router = useRouter()
+const route = useRoute()
 const supabase = useSupabaseClient()
-const handleOAuthCallback = async () => {
-  const urlParams = new URLSearchParams(window.location.search)
-  const code = urlParams.get('code')
 
-  if (code) {
-    try {
-      const { data, error } = await supabase.auth.getSession()
+const handleCallback = async () => {
+    const hash = route.hash
+
+    if (hash && hash.includes('access_token')) {
+    // 2. Remove the '#' so we can parse it like a standard query string
+    const params = new URLSearchParams(hash.substring(1))
+    
+    // 3. Extract the exact tokens Supabase needs
+    const accessToken = params.get('access_token')
+    const refreshToken = params.get('refresh_token')
+
+    if (accessToken && refreshToken) {
+      // 4. FORCE Supabase to establish the session manually
+      const { error } = await supabase.auth.setSession({
+        access_token: accessToken,
+        refresh_token: refreshToken
+      })
+
       if (error) {
-        console.error('Error during OAuth code exchange:', error.message)
+        console.error('Failed to set session:', error.message)
+        alert('Invite link expired or invalid.')
         return
       }
-      if (data) {
-        router.push('/dashboard')
-      }
+
+      // 6. Hard-redirect to your update-password page. 
+      // We use window.location.href instead of navigateTo() to force a 
+      // full page reload, guaranteeing the new auth cookie is recognized by Nuxt.
+      return navigateTo('/reset_password')
     }
-    catch (error) {
-      console.error('Error during OAuth callback handling:', error)
-      router.push('/login')
-    }
-  }
-  else {
-    console.error('No code found in the URL')
-    router.push('/login')
+  } else {
+    // If there is no hash, they shouldn't be on this page.
+    return navigateTo('/login')
   }
 }
+
+
+
 onMounted(() => {
-  handleOAuthCallback()
+    handleCallback()
 })
 </script>
-
-<template>
-  <div class="text-center text-2xl h-screen flex items-center justify-center">
-    Redirecting...
-  </div>
-</template>

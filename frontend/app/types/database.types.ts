@@ -180,74 +180,64 @@ export type Database = {
       }
       organizers: {
         Row: {
-          created_at: string
-          description: string | null
-          email: string | null
-          id: number
-          is_active: boolean
-          logo_url: string | null
-          name: string
-          phone: string | null
-          updated_at: string
+          id: string
           website: string | null
         }
         Insert: {
-          created_at?: string
-          description?: string | null
-          email?: string | null
-          id?: never
-          is_active?: boolean
-          logo_url?: string | null
-          name: string
-          phone?: string | null
-          updated_at?: string
+          id: string
           website?: string | null
         }
         Update: {
-          created_at?: string
-          description?: string | null
-          email?: string | null
-          id?: never
-          is_active?: boolean
-          logo_url?: string | null
-          name?: string
-          phone?: string | null
-          updated_at?: string
+          id?: string
           website?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "organizers_id_fkey"
+            columns: ["id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       profiles: {
         Row: {
           avatar_url: string
+          bio: string | null
           contact_info:
             | Database["public"]["CompositeTypes"]["profile_contact_type"][]
             | null
           created_at: string
           email: string | null
           id: string
+          is_complete: boolean | null
           role: Database["public"]["Enums"]["profile_role"] | null
           username: string | null
         }
         Insert: {
           avatar_url?: string
+          bio?: string | null
           contact_info?:
             | Database["public"]["CompositeTypes"]["profile_contact_type"][]
             | null
           created_at?: string
           email?: string | null
           id: string
+          is_complete?: boolean | null
           role?: Database["public"]["Enums"]["profile_role"] | null
           username?: string | null
         }
         Update: {
           avatar_url?: string
+          bio?: string | null
           contact_info?:
             | Database["public"]["CompositeTypes"]["profile_contact_type"][]
             | null
           created_at?: string
           email?: string | null
           id?: string
+          is_complete?: boolean | null
           role?: Database["public"]["Enums"]["profile_role"] | null
           username?: string | null
         }
@@ -340,15 +330,7 @@ export type Database = {
           organizer_id?: number
           updated_at?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "scholarship_types_organizer_id_fkey"
-            columns: ["organizer_id"]
-            isOneToOne: false
-            referencedRelation: "organizers"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       students: {
         Row: {
@@ -428,7 +410,24 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      organizer_list_view: {
+        Row: {
+          avatar_url: string | null
+          email: string | null
+          id: string | null
+          username: string | null
+          website: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "organizers_id_fkey"
+            columns: ["id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Functions: {
       [_ in never]: never
