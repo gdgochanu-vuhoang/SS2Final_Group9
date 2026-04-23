@@ -1,6 +1,6 @@
 <template>
     <div class="flex flex-col gap-10">
-        <ScholarshipDetailBanner :banner="scholarship?.banner" :title="scholarship?.title" />
+        <ScholarshipDetailBanner :banner="scholarship?.banner_url" :title="scholarship?.title" />
         <div class="flex gap-10 flex-col xl:flex-row">
             <CommonPageSection class="shrink-0 w-full xl:w-50" inner-class="flex flex-row xl:flex-col h-full items-start gap-8">
                 <div class="grid grid-cols-2 xl:grid-cols-1 gap-4 w-full">

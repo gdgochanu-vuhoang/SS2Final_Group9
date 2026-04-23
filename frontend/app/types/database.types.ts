@@ -352,6 +352,7 @@ export type Database = {
       }
       scholarships: {
         Row: {
+          banner_url: string | null
           created_at: string
           deadline: string | null
           description: string | null
@@ -361,6 +362,7 @@ export type Database = {
           title: string
         }
         Insert: {
+          banner_url?: string | null
           created_at?: string
           deadline?: string | null
           description?: string | null
@@ -370,6 +372,7 @@ export type Database = {
           title: string
         }
         Update: {
+          banner_url?: string | null
           created_at?: string
           deadline?: string | null
           description?: string | null
@@ -478,6 +481,7 @@ export type Database = {
       }
       scholarship_list_view: {
         Row: {
+          banner_url: string | null
           created_at: string | null
           deadline: string | null
           description: string | null

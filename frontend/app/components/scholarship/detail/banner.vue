@@ -14,7 +14,7 @@ import type { Tables } from '~/types/database.types';
 
 
 defineProps<{
-    banner?: Tables<"scholarship">['banner']
-    title?: Tables<"scholarship">['title']
+    banner?: Tables<"scholarships">['banner_url']
+    title?: Tables<"scholarships">['title']
 }>()
 </script>

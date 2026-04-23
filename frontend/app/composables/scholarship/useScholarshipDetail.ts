@@ -11,14 +11,14 @@ export const useScholarshipDetail = async (id?: string ) => {
     const supabase = useSupabaseClient()
 
     const scholarshipDetailKey = computed(() => {
-        return `scholarshipDetail-${id}`
+        return `scholarship-detail-${id}`
     })
 
     const { data, error } = await useAsyncData(
         scholarshipDetailKey,
         async () => {
             const { data } = await supabase
-                .from('scholarship')
+                .from('scholarships')
                 .select('*')
                 .eq('id', id) 
                 .single()
