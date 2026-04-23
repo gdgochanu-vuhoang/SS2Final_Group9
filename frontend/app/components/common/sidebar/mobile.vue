@@ -22,7 +22,7 @@
                     <div v-for="(section, id) in authorizedSidebarOptions" :key="id">
                         <UButton
 :leading-icon="section.icon" variant="ghost" color="info"
-                            class="w-full py-2 cursor-pointer text-white hover:bg-info-400 justify-center" :to="section.path"
+                            class="w-full py-2 cursor-pointer text-white hover:bg-info-400" :to="section.path"
                             active-class="bg-info">
                             <p class="text-nowrap overflow-hidden transition-all font-bold">{{ sidebarOpen ? section.name : '' }}
                             </p>

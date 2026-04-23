@@ -24,8 +24,14 @@ export const sidebarOptions = [
         admin: true
     },
     {
+        name: 'Manage Scholarships',
+        icon: 'i-heroicons-clipboard-document-solid',
+        path: '/dashboard/admin/manage-scholarships',
+        admin: true
+    },
+    {
         name: 'Manage Organizers',
-        icon: 'i-heroicons-clipboard-users-solid',
+        icon: 'i-heroicons-users-solid',
         path: '/dashboard/admin/manage-organizers',
         admin: true
     },

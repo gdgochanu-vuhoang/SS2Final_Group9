@@ -7,12 +7,12 @@
                     <NuxtImg :src="icon" format="webp" quality="70" class="rounded-lg w-full max-w-30 mt-4 mx-auto" preload />
                 </div>
                 <div class="flex flex-col gap-2 w-full px-4">
-                    <div v-for="(section, id) in authorizedSidebarOptions" :key="id">
+                    <div v-for="(section, id) in authorizedSidebarOptions" :key="id" class="w-full">
                         <UButton
 :leading-icon="section.icon" variant="ghost" color="info"
-                            class="w-full cursor-pointer text-white hover:bg-info-400 justify-center py-2" :to="section.path"
+                            class="w-full cursor-pointer text-white hover:bg-info-400 py-2" :to="section.path"
                             active-class="bg-info">
-                            <p class="text-nowrap overflow-hidden transition-all font-bold">{{sidebarOpen ? section.name : ''}}</p>
+                            <p class="text-wrap overflow-hidden transition-all font-bold">{{sidebarOpen ? section.name : ''}}</p>
                         </UButton>
                     </div>
                 </div>
