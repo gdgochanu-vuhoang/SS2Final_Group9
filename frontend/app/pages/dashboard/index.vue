@@ -1,14 +1,13 @@
 <template>
-    <div>
-        <CommonPageSection v-if="!curUser?.is_filled" inner-class="flex flex-col justify-center py-16 gap-8">
-            <h1>Tài khoản chưa được điền thông tin</h1>
-            <p>Vui lòng điền thông tin cá nhân để tiếp tục</p>
-            <UButton :to="`/dashboard/${curUser?.id}/edit`" color="info" label="Điền thông tin" />
-        </CommonPageSection>
-    </div>
+  <div>
+    <ProfileMissingInfo
+      v-if="!curUser?.is_complete"
+    />
+  </div>
 </template>
-<script setup lang="ts">
-import { useUser } from '~/composables/profile/useUser';
 
-const { curUser } = await useUser()
+<script setup lang="ts">
+import type { Tables } from '~/types/database.types'
+
+const { data: curUser } = useNuxtData<Tables<'profiles'>>('user-detail')
 </script>

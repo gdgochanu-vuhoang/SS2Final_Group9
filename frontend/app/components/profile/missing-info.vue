@@ -1,23 +1,26 @@
 <template>
   <CommonPageSection inner-class="flex flex-col justify-center items-center gap-6 py-10">
-    <h2 class="text-3xl font-bold">
-      Tài khoản thiếu thông tin
+    <h2 class="text-3xl font-bold text-info">
+      Incomplete Account
     </h2>
     <p class="text-xl">
-      Vui lòng đến hoàn thành!
+      Please complete your account!
     </p>
     <UButton
       class="py-4 cursor-pointer"
       color="info"
-      label="Chỉnh sửa Thông tin"
+      label="Edit Profile"
       @click="handleRouting"
     />
   </CommonPageSection>
 </template>
 
 <script setup lang="ts">
+import type { Tables } from '~/types/database.types'
+
+const { data: curUser } = useNuxtData<Tables<'profiles'>>('user-detail')
 
 const handleRouting = () => {
-  navigateTo(`/dashboard/${profile.value?.id}/edit`)
+  navigateTo(`/dashboard/${curUser.value?.id}/edit`)
 }
 </script>

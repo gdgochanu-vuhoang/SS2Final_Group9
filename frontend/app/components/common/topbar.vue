@@ -56,9 +56,9 @@
 
 <script setup lang="ts">
 import type { DropdownMenuItem } from '@nuxt/ui'
-import type { Tables } from '~/types/database.types'
+import { useUser } from '~/composables/profile/useUser'
 
-const { data: curUser } = useNuxtData<Tables<'profiles'>>('user-detail')
+const { curUser } = await useUser()
 
 const { logOut } = useAuth()
 
