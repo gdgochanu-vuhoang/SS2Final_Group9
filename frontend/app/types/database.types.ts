@@ -385,31 +385,43 @@ export type Database = {
       }
       students: {
         Row: {
+          class: string | null
           dob: string | null
+          field_of_study: string | null
           full_name: string | null
           gender: Database["public"]["Enums"]["student_gender"] | null
           id: string
           residence:
             | Database["public"]["CompositeTypes"]["student_residence_type"]
             | null
+          student_code: string | null
+          university: string | null
         }
         Insert: {
+          class?: string | null
           dob?: string | null
+          field_of_study?: string | null
           full_name?: string | null
           gender?: Database["public"]["Enums"]["student_gender"] | null
           id: string
           residence?:
             | Database["public"]["CompositeTypes"]["student_residence_type"]
             | null
+          student_code?: string | null
+          university?: string | null
         }
         Update: {
+          class?: string | null
           dob?: string | null
+          field_of_study?: string | null
           full_name?: string | null
           gender?: Database["public"]["Enums"]["student_gender"] | null
           id?: string
           residence?:
             | Database["public"]["CompositeTypes"]["student_residence_type"]
             | null
+          student_code?: string | null
+          university?: string | null
         }
         Relationships: [
           {
