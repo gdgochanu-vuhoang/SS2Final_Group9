@@ -29,7 +29,7 @@
         <template #index-cell="{ row }">
           <span class="text-gray-500 font-medium">{{ row.index + 1 }}</span>
         </template>
-        <template #avatar-cell="{ row }">
+        <template #icon-cell="{ row }">
           <div v-if="row.original.icon_url">
             <NuxtImg
               :src="row.original.icon_url"
@@ -88,6 +88,10 @@ const columns: TableColumn<Tables<'scholarship_list_view'>>[] = [
   {
     id: 'index',
     header: '#',
+  },
+  {
+    id: 'icon',
+    header: '',
   },
   {
     accessorKey: 'title',
