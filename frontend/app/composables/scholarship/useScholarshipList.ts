@@ -1,4 +1,4 @@
-import type { Enums } from '~/types/database.types'
+import type { Enums, Tables } from '~/types/database.types'
 
 export const useScholarshipList = async (id?: string, role?: Enums<'profile_role'>) => {
   const toast = useToast()
@@ -32,6 +32,10 @@ export const useScholarshipList = async (id?: string, role?: Enums<'profile_role
     return { data }
   }
 
+  const filterByTier = (scholarships: Tables<'scholarships'>[], tier: Enums<'scholarship_tier'>) => {
+    return scholarships.filter(s => tier.includes(s.tier))
+  }
+
   const { data, error } = await useAsyncData(
     scholarshipListKey,
     async () => {
@@ -43,5 +47,5 @@ export const useScholarshipList = async (id?: string, role?: Enums<'profile_role
   )
   if (error.value) handleError(error.value.message)
 
-  return { data, filteredData, listById }
+  return { data, filterByTier, filteredData, listById }
 }
