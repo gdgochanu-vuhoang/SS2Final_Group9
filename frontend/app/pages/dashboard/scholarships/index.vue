@@ -7,12 +7,11 @@
           v-for="option in tierOptions"
           :key="option.label"
           class="w-36 md:w-48 h-16 justify-center md:text-lg cursor-pointer"
-          :variant="route.hash === option.label ? 'solid' : 'ghost'"
+          :class="route.hash === option.hash && 'scale-110'"
+          :variant="route.hash === option.hash ? 'solid' : 'ghost'"
           color="info"
-          :to="{
-            hash: option.hash,
-          }"
           :label="option.label"
+          @click="toggleTier(option.hash)"
         />
       </div>
     </div>
@@ -34,6 +33,7 @@
 import { useScholarshipList } from '~/composables/scholarship/useScholarshipList'
 
 const route = useRoute()
+const router = useRouter()
 
 const { data, filterByTier } = await useScholarshipList()
 
@@ -56,4 +56,9 @@ const tierOptions = ref([
     hash: '#venue',
   },
 ])
+
+const toggleTier = (tier: string) => {
+  if (route.hash === tier) router.push({ hash: '' })
+  else router.push({ hash: tier })
+}
 </script>
