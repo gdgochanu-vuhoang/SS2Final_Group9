@@ -6,7 +6,7 @@
         <UButton
           v-for="option in tierOptions"
           :key="option.label"
-          class="w-36 md:w-48 h-16 justify-center md:text-lg cursor-pointer"
+          class="w-36 md:w-48 h-16 justify-center md:text-lg cursor-pointer transition-all"
           :class="route.hash === option.hash && 'scale-110'"
           :variant="route.hash === option.hash ? 'solid' : 'ghost'"
           color="info"

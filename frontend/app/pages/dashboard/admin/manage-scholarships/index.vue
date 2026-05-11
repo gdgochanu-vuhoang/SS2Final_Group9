@@ -40,6 +40,12 @@
           </div>
         </template>
 
+        <template #tier-cell="{ row }">
+          <ScholarshipTierBadge
+            :tier="row.original.tier ?? 'venue'"
+          />
+        </template>
+
         <template #created_at-cell="{ row }">
           <NuxtTime
             v-if="row.original.created_at"
