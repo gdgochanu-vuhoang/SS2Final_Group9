@@ -1,6 +1,8 @@
 import type { ChatMessage } from '~/types/chatbot'
 
 export const useChatbot = () => {
+  const toast = useToast()
+
   const isLoading = ref<boolean>(false)
   const chatOpen = useState<boolean>('chatbot-open', () => false)
 
@@ -49,17 +51,34 @@ export const useChatbot = () => {
     }
   }
 
-  const testTest = async () => {
-    console.log('is ingesting')
-    await $fetch('/api/gemini/ingest', {
-      method: 'POST',
-      body: {
-        title: 'How to upload a Banner',
-        content: 'To upload a scholarship banner, go to the Admin Dashboard, click Manage Scholarships, and use the file uploader. Banners must be under 5MB.',
-        url: '/dashboard/admin',
-      },
-    })
+  const ingest = async (form: { title: string, content: string, url: string }) => {
+    isLoading.value = true
+    try {
+      await $fetch('/api/gemini/ingest', {
+        method: 'POST',
+        body: {
+          title: form.title,
+          content: form.content,
+          url: form.url,
+        },
+      })
+      toast.add({
+        title: 'Successful Ingestion',
+        description: 'Knowledge database updated!',
+        color: 'success',
+      })
+    }
+    catch (error) {
+      toast.add({
+        title: 'Error Ingesting Knowledge',
+        description: 'Please try again later!',
+        color: 'error',
+      })
+    }
+    finally {
+      isLoading.value = false
+    }
   }
 
-  return { isLoading, chatOpen, toggleChat, messages, sendMessage }
+  return { isLoading, chatOpen, toggleChat, messages, sendMessage, ingest }
 }
