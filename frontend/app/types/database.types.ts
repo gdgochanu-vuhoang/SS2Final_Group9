@@ -400,6 +400,30 @@ export type Database = {
         }
         Relationships: []
       }
+      site_documentation: {
+        Row: {
+          content: string
+          embedding: string | null
+          id: number
+          title: string
+          url: string | null
+        }
+        Insert: {
+          content: string
+          embedding?: string | null
+          id?: number
+          title: string
+          url?: string | null
+        }
+        Update: {
+          content?: string
+          embedding?: string | null
+          id?: number
+          title?: string
+          url?: string | null
+        }
+        Relationships: []
+      }
       students: {
         Row: {
           class: string | null
@@ -582,7 +606,20 @@ export type Database = {
       }
     }
     Functions: {
-      [_ in never]: never
+      match_site_documentation: {
+        Args: {
+          match_count: number
+          match_threshold: number
+          query_embedding: string
+        }
+        Returns: {
+          content: string
+          id: number
+          similarity: number
+          title: string
+          url: string
+        }[]
+      }
     }
     Enums: {
       profile_contact_enum: "PHONE" | "EMAIL"

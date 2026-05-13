@@ -40,7 +40,7 @@
             v-if="sidebarOpen"
             class="relative group flex items-center justify-center"
           >
-            <div class="size-12 z-2 rounded-full animate-scoped-gradient bg-gradient-to-r from-info-400 via-purple-400 to-info-500 bg-[length:300%_100%] p-2 shadow-xl transition-transform duration-400 ease-out group-hover:-translate-x-[80%]">
+            <div class="size-12 z-2 rounded-full animate-gradient bg-gradient-to-r from-info-400 via-purple-400 to-info-500 bg-[length:300%_100%] p-2 shadow-xl transition-transform duration-400 ease-out group-hover:-translate-x-[80%]">
               <UIcon
                 name="i-heroicons-sparkles-solid"
                 class="size-full"
@@ -54,7 +54,7 @@
           </div>
           <div
             v-else
-            class="mx-auto size-12 z-2 rounded-full animate-scoped-gradient bg-gradient-to-r from-info-400 via-purple-400 to-info-500 bg-[length:300%_100%] p-2 shadow-xl"
+            class="mx-auto size-12 z-2 rounded-full animate-gradient bg-gradient-to-r from-info-400 via-purple-400 to-info-500 bg-[length:300%_100%] p-2 shadow-xl"
           >
             <UIcon
               name="i-heroicons-sparkles-solid"
@@ -63,7 +63,6 @@
           </div>
         </button>
         <Chatbot class="bottom-0 left-[100%] mb-2 ml-2" />
-        {{ chatOpen }}
       </div>
       <div
         class="group absolute h-full w-2 py-2 right-0 top-0 cursor-pointer"
@@ -79,11 +78,11 @@
 import { icon } from '~/constants/logos'
 
 const { sidebarOpen, toggleSidebarOpen, authorizedSidebarOptions } = useSidebar()
-const { isLoading, toggleChat, chatOpen } = useChatbot()
+const { toggleChat } = useChatbot()
 </script>
 
 <style scoped>
-.animate-scoped-gradient {
+.animate-gradient {
   background-size: 300% 100%;
   animation: gradientMove 8s linear infinite;
 }

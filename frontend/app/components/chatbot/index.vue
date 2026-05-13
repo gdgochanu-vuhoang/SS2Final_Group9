@@ -10,7 +10,7 @@
       v-if="chatOpen"
       class="absolute w-140 pl-4"
     >
-      <div class="animate-scoped-gradient bg-gradient-to-r from-info-400 via-purple-400 to-info-500 bg-[length:300%_100%] rounded-lg w-full relative px-2 flex flex-col ring-4 ring-purple-600">
+      <div class="animate-gradient bg-gradient-to-r from-info-400 via-purple-400 to-info-500 bg-[length:300%_100%] rounded-lg w-full relative px-2 flex flex-col ring-4 ring-purple-600">
         <div class="absolute bottom-2 -left-2 size-4 bg-purple-600 rotate-45 rounded-sm -z-1" />
         <div class="h-12 flex items-center">
           <p class="font-bold text-white text-xl">
@@ -49,6 +49,7 @@
             variant="solid"
             class="ml-auto cursor-pointer bg-white hover:bg-neutral-200 size-10"
             :ui="{ base: 'p-0', leadingIcon: 'bg-purple-600 mx-auto size-8' }"
+            :loading="isLoading"
             @click="handleAddMessage"
           />
         </div>
@@ -58,7 +59,7 @@
 </template>
 
 <script lang="ts" setup>
-const { chatOpen, messages, addMessage } = useChatbot()
+const { isLoading, chatOpen, messages, sendMessage } = useChatbot()
 
 const curMessage = ref<string>('')
 
@@ -76,18 +77,17 @@ const scrollToBottom = async () => {
 }
 
 const handleAddMessage = async () => {
-  if (!chatOpen || !curMessage.value) return
-  addMessage({
-    role: 'user',
-    content: curMessage.value.trim(),
-  })
-  await scrollToBottom()
+  if (!chatOpen || !curMessage.value || isLoading.value) return
+  const query = curMessage.value.trim()
   curMessage.value = ''
+  await scrollToBottom()
+  await sendMessage(query)
+  await scrollToBottom()
 }
 </script>
 
 <style scoped>
-.animate-scoped-gradient {
+.animate-gradient {
   background-size: 300% 100%;
   animation: gradientMove 12s linear infinite;
 }

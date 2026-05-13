@@ -12,7 +12,7 @@ export const useChatbot = () => {
     {
       id: 'welcome-msg',
       role: 'assistant',
-      content: 'Hi there! I can help you find scholarships or explain how to use the dashboard. What do you need?',
+      content: 'Hi there! I am your personal assistant for ScholarHub. How can I help?',
     },
   ])
 
@@ -23,5 +23,43 @@ export const useChatbot = () => {
     })
   }
 
-  return { isLoading, chatOpen, toggleChat, messages, addMessage }
+  const sendMessage = async (message: string) => {
+    isLoading.value = true
+
+    try {
+      addMessage({
+        role: 'user',
+        content: message,
+      })
+      const response = await $fetch('/api/gemini/chat', {
+        method: 'POST',
+        body: { message: message },
+      })
+
+      addMessage({
+        role: 'assistant',
+        content: response.content,
+      })
+    }
+    catch (error) {
+      addMessage({ role: 'assistant', content: 'Connection error.' })
+    }
+    finally {
+      isLoading.value = false
+    }
+  }
+
+  const testTest = async () => {
+    console.log('is ingesting')
+    await $fetch('/api/gemini/ingest', {
+      method: 'POST',
+      body: {
+        title: 'How to upload a Banner',
+        content: 'To upload a scholarship banner, go to the Admin Dashboard, click Manage Scholarships, and use the file uploader. Banners must be under 5MB.',
+        url: '/dashboard/admin',
+      },
+    })
+  }
+
+  return { isLoading, chatOpen, toggleChat, messages, sendMessage }
 }
