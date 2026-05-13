@@ -23,10 +23,13 @@
           />
         </div>
         <div class="bg-white w-full h-80 rounded-lg p-2">
-          helooo
+          <p v-for="message in messages" :key="message.id">
+            {{ message.content }}
+          </p>
         </div>
         <div class=" flex h-14 items-center gap-4">
           <input
+            v-model="curMessage"
             type="text"
             placeholder="Enter your message..."
             class="w-full bg-white rounded-lg p-2"
@@ -37,7 +40,7 @@
             variant="solid"
             class="ml-auto cursor-pointer bg-white hover:bg-neutral-200 size-10"
             :ui="{ base: 'p-0', leadingIcon: 'bg-purple-600 mx-auto size-8' }"
-            @click="() => {}"
+            @click="handleAddMessage"
           />
         </div>
       </div>
@@ -46,7 +49,17 @@
 </template>
 
 <script lang="ts" setup>
-const { chatOpen } = useChatbot()
+const { chatOpen, messages, addMessage } = useChatbot()
+
+const curMessage = ref<string>('')
+
+const handleAddMessage = () => {
+  addMessage({
+    role: 'user',
+    content: curMessage.value,
+  })
+  curMessage.value = ''
+}
 </script>
 
 <style scoped>
