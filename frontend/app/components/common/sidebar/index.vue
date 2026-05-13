@@ -32,8 +32,9 @@
             </UButton>
           </div>
         </div>
-        <div
+        <button
           class="mt-auto mb-2 w-full cursor-pointer"
+          @click="toggleChat"
         >
           <div
             v-if="sidebarOpen"
@@ -60,8 +61,9 @@
               class="size-full"
             />
           </div>
-        </div>
-        <CommonChatbot class="bottom-0 left-[100%] mb-2 ml-2" />
+        </button>
+        <Chatbot class="bottom-0 left-[100%] mb-2 ml-2" />
+        {{ chatOpen }}
       </div>
       <div
         class="group absolute h-full w-2 py-2 right-0 top-0 cursor-pointer"
@@ -77,6 +79,7 @@
 import { icon } from '~/constants/logos'
 
 const { sidebarOpen, toggleSidebarOpen, authorizedSidebarOptions } = useSidebar()
+const { isLoading, toggleChat, chatOpen } = useChatbot()
 </script>
 
 <style scoped>
