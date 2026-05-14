@@ -57,8 +57,16 @@ export default defineEventHandler(async (event) => {
     User Question:
     ${userMessage}
   `
+
+  const chat = chatModel.startChat({
+    history: [
+      { role: 'user', parts: [{ text: 'Previous user question' }] },
+      { role: 'model', parts: [{ text: 'Previous AI answer' }] },
+    ],
+  })
+
   try {
-    const result = await chatModel.generateContent(finalPrompt)
+    const result = await chat.sendMessage(finalPrompt)
     const aiResponse = result.response.text()
 
     return {

@@ -34,6 +34,7 @@
             :key="message.id"
             :message="message"
           />
+          <ChatbotReplyingBlock v-if="isLoading" />
         </div>
         <div class=" flex h-14 items-center gap-4">
           <input
