@@ -74,6 +74,7 @@
       </UTable>
     </CommonPageSection>
   </div>
+  {{ all }}
 </template>
 
 <script lang="ts" setup>

@@ -49,6 +49,8 @@
 <script setup lang="ts">
 import { useScholarshipList } from '~/composables/scholarship/useScholarshipList'
 
+const router = useRouter()
+
 const sortOptions = [
   {
     label: 'Applicants',

@@ -1,6 +1,8 @@
 import type { Enums, Tables } from '~/types/database.types'
+import { TABLE_LIMIT } from '~/constants/scholarship'
 
 export const useScholarshipList = async (id?: string, role?: Enums<'profile_role'>) => {
+
   const toast = useToast()
   const supabase = useSupabaseClient()
 
@@ -17,6 +19,17 @@ export const useScholarshipList = async (id?: string, role?: Enums<'profile_role
       color: 'error',
     })
     return { data: ref(null) }
+  }
+
+  const listAll = async (page: number) => {
+    const from = (page - 1) * TABLE_LIMIT
+    const to = from + TABLE_LIMIT - 1
+    const { data, error } = await supabase
+      .from('scholarship_list_view')
+      .select('*')
+      .range(from, to)
+    if (error) handleError(error.message)
+    return data
   }
 
   const listById = async () => {
@@ -39,10 +52,7 @@ export const useScholarshipList = async (id?: string, role?: Enums<'profile_role
   const { data, error } = await useAsyncData(
     scholarshipListKey,
     async () => {
-      const { data } = await supabase
-        .from('scholarship_list_view')
-        .select('*')
-      return data
+      return listAll(1)
     },
   )
   if (error.value) handleError(error.value.message)
