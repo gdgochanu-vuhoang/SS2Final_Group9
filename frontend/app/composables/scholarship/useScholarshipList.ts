@@ -2,7 +2,6 @@ import type { Enums, Tables } from '~/types/database.types'
 import { TABLE_LIMIT } from '~/constants/scholarship'
 
 export const useScholarshipList = async (id?: string, role?: Enums<'profile_role'>) => {
-
   const toast = useToast()
   const supabase = useSupabaseClient()
 

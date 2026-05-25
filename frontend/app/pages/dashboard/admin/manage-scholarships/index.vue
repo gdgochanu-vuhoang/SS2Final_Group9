@@ -19,7 +19,9 @@
         to="manage-scholarships/create"
       />
     </CommonPageSection>
-    <CommonPageSection>
+    <CommonPageSection
+      inner-class="flex-col"
+    >
       <UTable
         ref="table"
         class="overflow-auto w-full"
@@ -72,9 +74,9 @@
           </UDropdownMenu>
         </template>
       </UTable>
+      <CommonTableTrigger />
     </CommonPageSection>
   </div>
-  {{ all }}
 </template>
 
 <script lang="ts" setup>
