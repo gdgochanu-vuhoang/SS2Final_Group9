@@ -9,4 +9,7 @@
 </template>
 
 <script lang="ts" setup>
+defineProps<{
+  onClick: () => void
+}>()
 </script>
