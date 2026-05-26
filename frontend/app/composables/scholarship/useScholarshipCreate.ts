@@ -73,6 +73,10 @@ export const useScholarshipCreate = async () => {
     })
 
     isLoading.value = false
+    clearNuxtData('scholarship-list')
+    clearNuxtData(`scholarship-list-${curUser.value!.id}`)
+    const curPage = useState('scholarship-list-page')
+    curPage.value = { all: 2, filtered: 1, total: 0 }
     toast.add({
       title: 'Scholarship Created!',
       color: 'success',
