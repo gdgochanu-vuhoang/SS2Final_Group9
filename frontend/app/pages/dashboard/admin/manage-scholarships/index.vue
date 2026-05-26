@@ -7,12 +7,12 @@
           @update:model-value="table?.tableApi?.getColumn('title')?.setFilterValue($event)" />
         <CommonPageToggle label="Sort By" :options="sortOptions" />
       </div>
-      <UButton class="ml-auto cursor-pointer" leading-icon="i-heroicons-plus-circle-solid" label="Create Scholarship"
+      <UButton v-if="curUser?.role === 'ORGANIZER'" class="ml-auto cursor-pointer" leading-icon="i-heroicons-plus-circle-solid" label="Create Scholarship"
         to="manage-scholarships/create" />
     </CommonPageSection>
     <CommonPageSection inner-class="flex-col">
       <p class="self-start">
-        {{ `Showing ${route.hash === '#all' ? all?.length : own?.length} / ${curPage.total} rows` }}
+        {{ `Showing ${route.hash === '#all' ? all?.length ?? 0 : own?.length ?? 0} / ${curPage.total} rows` }}
       </p>
       <UTable ref="table" class="overflow-auto w-full" :data="route.hash === '#all' ? all! : own!" :columns="columns">
         <template #index-cell="{ row }">

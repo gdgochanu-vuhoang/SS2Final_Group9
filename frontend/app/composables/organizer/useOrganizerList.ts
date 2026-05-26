@@ -9,10 +9,10 @@ export const useOrganizerList = async () => {
   const { data, error } = await useAsyncData(
     organizerListKey,
     async () => {
-      const { data } = await supabase
+      const { data, count } = await supabase
         .from('organizer_list_view')
-        .select('*')
-      return data
+        .select('*', { count: 'exact' })
+      return { data, count }
     },
   )
   if (error.value) {
@@ -20,7 +20,7 @@ export const useOrganizerList = async () => {
       title: 'Error Fetching Detail!',
       color: 'error',
     })
-    return { data: ref(null) }
+    return { data: ref(null), count: ref(0) }
   }
 
   return { data }
