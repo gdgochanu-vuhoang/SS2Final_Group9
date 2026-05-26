@@ -22,6 +22,8 @@
     <CommonPageSection
       inner-class="flex-col"
     >
+      {{ curPage }}
+      {{ canLoadMore }}
       <UTable
         ref="table"
         class="overflow-auto w-full"
@@ -74,7 +76,7 @@
           </UDropdownMenu>
         </template>
       </UTable>
-      <CommonTableTrigger />
+      <CommonTableTrigger :onLoad="(fetchPage)" :canLoadMore="canLoadMore"/>
     </CommonPageSection>
   </div>
 </template>
@@ -91,7 +93,7 @@ const router = useRouter()
 
 const table = useTemplateRef('table')
 
-const { data: all, filteredData: own, listById } = await useScholarshipList(curUser.value!.id, curUser.value!.role!)
+const { all, own, curPage, canLoadMore, fetchPage } = await useScholarshipList(curUser.value!.id, curUser.value!.role!)
 
 const columns: TableColumn<Tables<'scholarship_list_view'>>[] = [
   {
@@ -136,7 +138,7 @@ const rowActions = (row: Tables<'scholarship_list_view'>) => [
 ]
 
 const handleFetchOwn = async () => {
-  if (!own.value) await listById()
+  if (!own.value) await fetchPage(true)
 }
 
 const sortOptions = [
