@@ -21,7 +21,7 @@ defineProps<{
   label: string
   options: {
     label: string
-    hash: string
+    hash?: string
     onclick?: () => void
   }[]
 }>()

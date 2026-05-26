@@ -22,8 +22,9 @@
     <CommonPageSection
       inner-class="flex-col"
     >
-      {{ curPage }}
-      {{ canLoadMore }}
+      <p class="self-start">
+        {{ `Showing ${route.hash === '#all' ? all?.length : own?.length} / ${curPage.total} rows` }}
+      </p>
       <UTable
         ref="table"
         class="overflow-auto w-full"
@@ -76,7 +77,7 @@
           </UDropdownMenu>
         </template>
       </UTable>
-      <CommonTableTrigger :onLoad="(fetchPage)" :canLoadMore="canLoadMore"/>
+      <CommonTableTrigger :onLoad="fetchPage" :canLoadMore="route.hash === '#all' ? canLoadMore.all : canLoadMore.own" :is-loading="isLoading"/>
     </CommonPageSection>
   </div>
 </template>
@@ -93,7 +94,7 @@ const router = useRouter()
 
 const table = useTemplateRef('table')
 
-const { all, own, curPage, canLoadMore, fetchPage } = await useScholarshipList(curUser.value!.id, curUser.value!.role!)
+const { isLoading, isFiltering, all, own, curPage, canLoadMore, fetchPage, fetchCount } = await useScholarshipList(curUser.value!.id, curUser.value!.role!)
 
 const columns: TableColumn<Tables<'scholarship_list_view'>>[] = [
   {
@@ -137,10 +138,6 @@ const rowActions = (row: Tables<'scholarship_list_view'>) => [
   },
 ]
 
-const handleFetchOwn = async () => {
-  if (!own.value) await fetchPage(true)
-}
-
 const sortOptions = [
   {
     label: 'All',
@@ -149,10 +146,17 @@ const sortOptions = [
   {
     label: 'Own',
     hash: '#own',
-    onclick: handleFetchOwn,
   },
 ]
 
+watch(() => route.hash, async (newHash) => {
+  if (newHash === '#own') {
+    isFiltering.value = true
+  } else {
+    isFiltering.value = false
+  }
+  await fetchCount()
+})
 onMounted(() => {
   router.push({ hash: '#all' })
 })
