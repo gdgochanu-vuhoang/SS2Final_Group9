@@ -3,16 +3,16 @@ export const useFetchProfileList = async () => {
   const supabase = useSupabaseClient()
 
   const profileDetailKey = computed(() => {
-    return `profileList`
+    return `profile-list`
   })
 
   const { data, error } = await useAsyncData(
     profileDetailKey,
     async () => {
-      const { data } = await supabase
+      const { data, count } = await supabase
         .from('students')
-        .select('uid, full_name, student_id, university, major, class')
-      return data
+        .select('uid, full_name, student_id, university, major, class', {count: 'exact'})
+      return { data, count }
     },
   )
   if (error.value) {
@@ -20,7 +20,7 @@ export const useFetchProfileList = async () => {
       title: 'Error Fetching Detail!',
       color: 'error',
     })
-    return { data: ref(null) }
+    return { data: ref(null), count: ref(0) }
   }
 
   return { data }

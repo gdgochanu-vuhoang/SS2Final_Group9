@@ -30,7 +30,7 @@
     </CommonPageSection>
     <CommonPageSection inner-class="flex-col">
       <p class="self-start">
-        {{ `Showing ${data?.data?.length} / ${data!.count} rows` }}
+        {{ `Showing ${data?.data?.length ?? 0} / ${data!.count ?? 0} rows` }}
       </p>
       <UTable class="w-full" ref="table" :data="data?.data!" :columns="columns">
         <template #index-cell="{ row }">
