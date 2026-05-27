@@ -1,17 +1,17 @@
 export const sidebarOptions = [
   {
-    name: 'Tổng quan',
+    name: 'Home',
     icon: 'i-heroicons-home-solid',
     path: '/dashboard',
   },
   {
-    name: 'Học bổng',
+    name: 'Scholarships',
     icon: 'i-heroicons-academic-cap-solid',
     path: '/dashboard/scholarships',
   },
 
   {
-    name: 'Quản lý Sinh viên',
+    name: 'Manage Students',
     icon: 'i-heroicons-users-solid',
     path: '/dashboard/admin/manage-students',
     roles: ['ADMIN'],
