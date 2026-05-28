@@ -30,10 +30,10 @@
 
 <script lang="ts" setup>
 import type { TableColumn } from '@nuxt/ui'
-import { useFetchProfileList } from '~/composables/profile/useFetchProfileList'
+import { useStudentList } from '~/composables/students/useStudentList'
 import type { Tables } from '~/types/database.types'
 
-const { data } = await useFetchProfileList()
+const { data } = await useStudentList()
 
 const handleViewStudent = (uid: string) => {
   navigateTo(`/dashboard/${uid}`)
@@ -48,16 +48,16 @@ const columns: TableColumn<Tables<'students'>>[] = [
     header: '#',
   },
   {
+    id: 'icon',
+    header: '',
+  },
+  {
     accessorKey: 'full_name',
     header: 'Full Name',
   },
   {
     accessorKey: 'student_id',
     header: 'Student Id',
-  },
-  {
-    accessorKey: 'full_name',
-    header: 'Full Name',
   },
   {
     accessorKey: 'university',

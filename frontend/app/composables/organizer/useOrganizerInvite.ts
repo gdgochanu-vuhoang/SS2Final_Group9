@@ -1,6 +1,6 @@
 import type { Enums } from '~/types/database.types'
 
-export const useProfileCreate = async () => {
+export const useOrganizerInvite = async () => {
   const toast = useToast()
   const isLoading = ref<boolean>(false)
 

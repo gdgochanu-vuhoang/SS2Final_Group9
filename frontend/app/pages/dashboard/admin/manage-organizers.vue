@@ -61,10 +61,10 @@
 import type { TableColumn } from '@nuxt/ui'
 import { z } from 'zod'
 import { useOrganizerList } from '~/composables/organizer/useOrganizerList'
-import { useProfileCreate } from '~/composables/profile/useProfileCreate'
+import { useOrganizerInvite } from '~/composables/organizer/useOrganizerInvite'
 import type { Enums, Tables } from '~/types/database.types'
 
-const { createProfile, isLoading: isCreating } = await useProfileCreate()
+const { createProfile, isLoading: isCreating } = await useOrganizerInvite()
 
 const createProfileOpen = shallowRef<boolean>(false)
 const createProfilePayloadState = ref({ email: '', username: '', role: 'ORGANIZER' as Enums<'profile_role'> })
