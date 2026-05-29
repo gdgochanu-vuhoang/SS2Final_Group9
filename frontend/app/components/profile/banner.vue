@@ -32,23 +32,29 @@
         </div>
       </div>
       <div class="lg:ml-auto flex gap-2">
-        <UButton
+        <div
           v-for="(action, id) in PROFILEACTIONS"
           :key="id"
-          :label="action.label"
-          :color="action.color"
-          :variant="action.variant"
-          :to="action.to"
-          class="h-10 cursor-pointer px-6"
-          @click="action.onclick"
-        />
+        >
+          <UButton
+            v-if="action.visible ?? true"
+            :label="action.label"
+            :color="action.color"
+            :variant="action.variant"
+            :to="action.to"
+            class="h-10 cursor-pointer px-6"
+            @click="action.onclick"
+          />
+        </div>
       </div>
     </CommonPageSection>
   </div>
 </template>
 
 <script setup lang="ts">
-import type { Enums } from '~/types/database.types'
+import type { Enums, Tables } from '~/types/database.types'
+
+const { data: curUser } = useNuxtData<Tables<'profiles'>>('user-detail')
 
 const PROFILEBANNER = '/ProfileBannerTemp.jpg'
 
@@ -68,6 +74,7 @@ const PROFILEACTIONS: action_types[] = [
     color: 'info',
     variant: 'outline',
     to: `/dashboard/${props.uid}/edit`,
+    visible: props.uid === curUser.value?.id,
   },
   {
     label: 'Share',
@@ -83,5 +90,6 @@ type action_types = {
   variant: 'solid' | 'outline' | 'link' | 'soft' | 'subtle' | 'ghost'
   onclick?: () => void
   to?: string
+  visible?: boolean
 }
 </script>

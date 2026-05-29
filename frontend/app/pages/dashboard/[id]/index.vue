@@ -107,7 +107,10 @@
         </CommonPageSection>
       </div>
     </div>
-    <div class="flex flex-col gap-10">
+    <div
+      v-else
+      class="flex flex-col gap-10"
+    >
       <CommonPageSection
         v-if="profile?.role === 'ORGANIZER'"
         title="Information"

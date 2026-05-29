@@ -187,7 +187,7 @@ const rowActions = (row: Tables<'student_list_view'>) => [
   {
     label: 'View',
     icon: 'i-heroicons-eye-solid',
-    to: `/dashboard/students/${row.id}`,
+    to: `/dashboard/${row.id}`,
   },
 ]
 </script>
