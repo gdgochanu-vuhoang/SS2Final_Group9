@@ -7,6 +7,7 @@ type FormPayload = {
   deadline: string
   description?: string
   banner_img: File | null
+  icon_img: File | null
 }
 
 export const useScholarshipCreate = async () => {
@@ -17,12 +18,13 @@ export const useScholarshipCreate = async () => {
   const createScholarship = async (payload: FormPayload) => {
     isLoading.value = true
 
-    const { banner_img, ...scholarshipData } = payload
+    const { banner_img, icon_img, ...scholarshipData } = payload
 
     const { data: curUser } = useNuxtData<Tables<'profiles'>>('user-detail')
     const { ingest } = useChatbot()
 
     let bannerUrl: string | undefined
+    let iconUrl: string | undefined
 
     if (payload.banner_img) {
       const fileExt = payload.banner_img.name.split('.').pop()
@@ -50,11 +52,38 @@ export const useScholarshipCreate = async () => {
       bannerUrl = `${data.publicUrl}?t=${Date.now()}`
     }
 
+    if (payload.icon_img) {
+      const fileExt = payload.icon_img.name.split('.').pop()
+      const filePath = `scholarships/${curUser.value!.id}/icon-${curUser.value!.id}-${scholarshipData.tier}-${scholarshipData.title}.${fileExt}`
+
+      const { error } = await supabase
+        .storage
+        .from('public_images')
+        .upload(filePath, payload.icon_img, {
+          upsert: true,
+        })
+      if (error) {
+        toast.add({
+          title: 'Update Icon Failure',
+          description: error.message,
+          color: 'error',
+        })
+        return
+      }
+      const { data } = supabase
+        .storage
+        .from('public_images')
+        .getPublicUrl(filePath)
+
+      iconUrl = `${data.publicUrl}?t=${Date.now()}`
+    }
+
     const { data, error } = await supabase
       .from('scholarships')
       .insert({
         ...scholarshipData,
         ...(bannerUrl && { banner_url: bannerUrl }),
+        ...(iconUrl && { icon_url: iconUrl }),
       })
       .select('id')
       .single()

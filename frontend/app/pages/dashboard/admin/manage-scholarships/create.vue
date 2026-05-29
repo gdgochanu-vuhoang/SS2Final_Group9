@@ -6,39 +6,64 @@
     <div class="relative flex justify-center mb-10">
       <div class="relative w-full">
         <img
-          v-if="!tempUrl"
+          v-if="!tempBanner"
           src="/scholarshipBannerPlaceholder.png"
           class="w-full h-100 rounded-lg object-cover shadow-xl"
         >
         <NuxtImg
           v-else
-          :src="tempUrl"
+          :src="tempBanner"
           class="w-full h-100 rounded-lg object-cover shadow-xl"
           format="webp"
           quality="70"
         />
         <input
-          ref="fileInput"
+          ref="bannerInput"
           type="file"
           accept="image/*"
           class="hidden"
-          @change="handleFileSelect"
+          @change="handleBannerSelect"
         >
         <button
           type="button"
           class="w-full h-100 p-0 m-0 absolute inset-0 bg-black/60 rounded-lg z-2 text-white font-bold text-center opacity-20 hover:opacity-100 hover:opacity-100 transition-opacity cursor-pointer"
-          @click="openFilePicker"
+          @click="openBannerPicker"
         >
-          Upload Image
+          Upload Banner
         </button>
       </div>
-      <div class="absolute -bottom-10 rounded-lg shadow-xl bg-white px-8 md:px-16 py-8 z-3">
-        <UTextarea
-          v-model="formState.title"
-          :ui="{ base: 'h-16 ring-0 focus-visible:ring-0 border-neutral focus-visible:border-info border-b-2 text-info text-2xl md:text-4xl font-bold', root: 'h-max min-h-0' }"
-          placeholder="Enter Title..."
-          autoresize
-        />
+      <div class="absolute -bottom-10 flex gap-26 h-30">
+        <div class="h-full w-30 relative">
+          <NuxtImg
+            v-if="tempIcon"
+            :src="tempIcon"
+            class="size-full rounded-lg object-cover shadow-xl"
+            format="webp"
+            quality="70"
+          />
+          <input
+            ref="iconInput"
+            type="file"
+            accept="image/*"
+            class="hidden"
+            @change="handleIconSelect"
+          >
+          <button
+            type="button"
+            class="size-full p-0 m-0 absolute inset-0 bg-black rounded-lg z-2 text-white font-bold text-center opacity-20 hover:opacity-100 hover:opacity-100 transition-opacity cursor-pointer"
+            @click="openIconPicker"
+          >
+            Upload Icon
+          </button>
+        </div>
+        <div class="rounded-lg shadow-xl bg-white px-8 md:px-16 py-8 z-3">
+          <UTextarea
+            v-model="formState.title"
+            :ui="{ base: 'h-16 ring-0 focus-visible:ring-0 border-neutral focus-visible:border-info border-b-2 text-info text-2xl md:text-4xl font-bold', root: 'h-max min-h-0' }"
+            placeholder="Enter Title..."
+            autoresize
+          />
+        </div>
       </div>
     </div>
     <div class="flex gap-10 flex-col xl:flex-row">
@@ -141,7 +166,7 @@ const formState = reactive({
   deadline: currentDay.toString(),
   description: '',
   banner_img: null as File | null,
-
+  icon_img: null as File | null,
 })
 
 const computedDate = computed({
@@ -158,23 +183,40 @@ const computedDate = computed({
   },
 })
 
-const fileInput = ref<HTMLInputElement | null>(null)
+const bannerInput = ref<HTMLInputElement | null>(null)
+const iconInput = ref<HTMLInputElement | null>(null)
 
-const openFilePicker = () => {
-  fileInput.value?.click()
+const openBannerPicker = () => {
+  bannerInput.value?.click()
+}
+const openIconPicker = () => {
+  iconInput.value?.click()
 }
 
-const tempUrl = ref<string>()
+const tempBanner = ref<string>()
+const tempIcon = ref<string>()
 
-const handleFileSelect = (event: Event) => {
+const handleBannerSelect = (event: Event) => {
   const target = event.target as HTMLInputElement
   if (target.files && target.files.length > 0) {
     const selectedFile = target.files[0]
-    if (tempUrl.value) {
-      URL.revokeObjectURL(tempUrl.value)
+    if (tempBanner.value) {
+      URL.revokeObjectURL(tempBanner.value)
     }
-    tempUrl.value = URL.createObjectURL(selectedFile)
+    tempBanner.value = URL.createObjectURL(selectedFile)
     formState.banner_img = target.files[0]
+  }
+}
+
+const handleIconSelect = (event: Event) => {
+  const target = event.target as HTMLInputElement
+  if (target.files && target.files.length > 0) {
+    const selectedFile = target.files[0]
+    if (tempIcon.value) {
+      URL.revokeObjectURL(tempIcon.value)
+    }
+    tempIcon.value = URL.createObjectURL(selectedFile)
+    formState.icon_img = target.files[0]
   }
 }
 
