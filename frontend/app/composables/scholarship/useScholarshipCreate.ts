@@ -50,12 +50,14 @@ export const useScholarshipCreate = async () => {
       bannerUrl = `${data.publicUrl}?t=${Date.now()}`
     }
 
-    const { error } = await supabase
+    const { data, error } = await supabase
       .from('scholarships')
       .insert({
         ...scholarshipData,
         ...(bannerUrl && { banner_url: bannerUrl }),
       })
+      .select('id')
+      .single()
 
     if (error) {
       isLoading.value = false
@@ -70,6 +72,7 @@ export const useScholarshipCreate = async () => {
     await ingest({
       title: `Scholarship: ${scholarshipData.title}, ${scholarshipData.tier}`,
       content: `There is a new ${scholarshipData.tier} tier scholarship called "${scholarshipData.title}". The award is ${scholarshipData.award || 'variable'}. The deadline to apply is ${scholarshipData.deadline}. Description: ${scholarshipData.description || 'No description provided.'}`,
+      url: `/scholarships/${data.id}`,
     })
 
     isLoading.value = false

@@ -12,9 +12,7 @@ export default defineNuxtRouteMiddleware((to) => {
   }
 
   if (to.path.startsWith('/dashboard')) {
-    if (!loggedIn.value) {
-      return navigateTo('/login?status=unauthorized')
-    }
+    if (!loggedIn.value) return navigateTo('/login?status=unauthorized')
   }
 
   if (to.path.startsWith('/dashboard/admin')) {
@@ -26,6 +24,7 @@ export default defineNuxtRouteMiddleware((to) => {
 
   const editRouteMatch = to.path.match(/^\/dashboard\/([^/]+)\/edit\/?$/)
   if (editRouteMatch) {
+    if (!loggedIn.value) return navigateTo('/login?status=unauthorized')
     const urlId = editRouteMatch[1]
     if (curUser.value?.id !== urlId) {
       return navigateTo('/dashboard')
