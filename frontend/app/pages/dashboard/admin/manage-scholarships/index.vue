@@ -20,6 +20,23 @@
         label="Create Scholarship"
         to="manage-scholarships/create"
       />
+      <CommonPageModal
+        v-model:is-open="deleteScholarshipOpen"
+        title="Delete Scholarship"
+        inner-class="flex-col justify-center gap-8"
+      >
+        <p class="text-dimmed">
+          Are you sure you want to delete this scholarship? This action cannot be undone.
+        </p>
+        <UButton
+          class="cursor-pointer"
+          label="Delete Scholarship"
+          :ui="{ label: ['mx-auto text-lg', isDeleting && 'hidden'], leadingIcon: 'mx-auto' }"
+          :loading="isDeleting"
+          color="error"
+          @click="handleDelete(deleteScholarshipId)"
+        />
+      </CommonPageModal>
     </CommonPageSection>
     <CommonPageSection inner-class="flex-col">
       <p class="self-start">
@@ -86,6 +103,7 @@
 
 <script lang="ts" setup>
 import type { TableColumn } from '@nuxt/ui'
+import { useScholarshipDelete } from '~/composables/scholarship/useScholarshipDelete'
 import { useScholarshipList } from '~/composables/scholarship/useScholarshipList'
 import type { Tables } from '~/types/database.types'
 
@@ -94,10 +112,14 @@ const { data: curUser } = useNuxtData<Tables<'profiles'>>('user-detail')
 const route = useRoute()
 const router = useRouter()
 
+const deleteScholarshipOpen = shallowRef<boolean>(false)
+const deleteScholarshipId = shallowRef<string>('')
+
 const table = useTemplateRef('table')
 const UButton = resolveComponent('UButton')
 
 const { isLoading, isFiltering, all, own, curPage, canLoadMore, fetchPage, fetchCount } = await useScholarshipList(curUser.value!.id, curUser.value!.role!)
+const { deleteScholarship, isDeleting } = await useScholarshipDelete()
 
 const columns: TableColumn<Tables<'scholarship_list_view'>>[] = [
   {
@@ -163,11 +185,32 @@ const columns: TableColumn<Tables<'scholarship_list_view'>>[] = [
   },
 ]
 
+const handleDelete = async (id: string) => {
+  await deleteScholarship(id)
+  await fetchCount()
+  deleteScholarshipOpen.value = false
+  deleteScholarshipId.value = ''
+}
+
 const rowActions = (row: Tables<'scholarship_list_view'>) => [
   {
     label: 'View',
     icon: 'i-heroicons-eye-solid',
     to: `/dashboard/scholarships/${row.id}`,
+  },
+  {
+    label: 'Edit',
+    icon: 'i-heroicons-pencil-solid',
+    to: `/dashboard/scholarships/${row.id}/edit`,
+  },
+  {
+    label: 'Delete',
+    icon: 'i-heroicons-trash-solid',
+    onClick: () => {
+      deleteScholarshipOpen.value = true
+      deleteScholarshipId.value = row.id!
+    },
+    color: 'error',
   },
 ]
 
