@@ -8,6 +8,7 @@
           @update:model-value="table?.tableApi?.getColumn('title')?.setFilterValue($event)"
         />
         <CommonPageToggle
+          v-if="curUser?.role === 'ORGANIZER'"
           label="Sort By"
           :options="sortOptions"
         />

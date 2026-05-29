@@ -48,16 +48,16 @@
         </template>
 
         <template #actions-cell="{ row }">
-          <div class="flex justify-end">
+          <UDropdownMenu
+            :items="rowActions(row.original)"
+            class="flex justify-end"
+          >
             <UButton
-              icon="i-heroicons-eye"
-              size="sm"
+              icon="i-heroicons-bars-3"
               color="info"
-              @click="handleViewStudent(row.original.id!)"
-            >
-              View
-            </UButton>
-          </div>
+              variant="ghost"
+            />
+          </UDropdownMenu>
         </template>
       </UTable>
       <CommonTableTrigger
@@ -75,10 +75,6 @@ import { useStudentList } from '~/composables/students/useStudentList'
 import type { Tables } from '~/types/database.types'
 
 const { all, canLoadMore, fetchPage, isLoading, curPage } = await useStudentList()
-
-const handleViewStudent = (uid: string) => {
-  navigateTo(`/dashboard/${uid}`)
-}
 
 const table = useTemplateRef('table')
 const UButton = resolveComponent('UButton')
@@ -184,6 +180,14 @@ const columns: TableColumn<Tables<'student_list_view'>>[] = [
   {
     id: 'actions',
     header: '',
+  },
+]
+
+const rowActions = (row: Tables<'student_list_view'>) => [
+  {
+    label: 'View',
+    icon: 'i-heroicons-eye-solid',
+    to: `/dashboard/students/${row.id}`,
   },
 ]
 </script>
