@@ -50,7 +50,6 @@ export const useScholarshipList = async (id?: string, role?: Enums<'profile_role
   })
 
   const fetchPage = async () => {
-    console.log(`fetching ${isFiltering.value ? 'filtered' : 'all'} count...`)
     isLoading.value = true
     const from = (curPage.value[isFiltering.value ? 'filtered' : 'all'] - 1) * TABLE_LIMIT
     const to = from + TABLE_LIMIT - 1
@@ -64,8 +63,6 @@ export const useScholarshipList = async (id?: string, role?: Enums<'profile_role
       const reqColumn = 'organizers'
       query = query.contains(reqColumn, JSON.stringify([{ id: id }]))
     }
-
-    console.log(`fetching from ${from} to ${to}...`)
 
     const { data, error } = await query
     isLoading.value = false
@@ -84,8 +81,8 @@ export const useScholarshipList = async (id?: string, role?: Enums<'profile_role
     }
     return data
   }
-  
-  const { data, error } = await useAsyncData(
+
+  const { error } = await useAsyncData(
     'scholarship-list',
     async () => {
       await fetchCount()
@@ -100,8 +97,8 @@ export const useScholarshipList = async (id?: string, role?: Enums<'profile_role
       getCachedData: (key) => {
         const { data } = useNuxtData(key)
         return data.value ?? undefined
-      }
-    }
+      },
+    },
   )
   if (error.value) handleError(error.value.message)
 

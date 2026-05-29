@@ -2,25 +2,45 @@
   <div class="flex flex-col gap-10">
     <CommonPageSection title="Manage Scholarships">
       <div class="flex flex-col gap-4 lg:flex-row lg:items-center">
-        <UInput :model-value="table?.tableApi?.getColumn('title')?.getFilterValue() as string"
+        <UInput
+          :model-value="table?.tableApi?.getColumn('title')?.getFilterValue() as string"
           placeholder="Search Title..."
-          @update:model-value="table?.tableApi?.getColumn('title')?.setFilterValue($event)" />
-        <CommonPageToggle label="Sort By" :options="sortOptions" />
+          @update:model-value="table?.tableApi?.getColumn('title')?.setFilterValue($event)"
+        />
+        <CommonPageToggle
+          label="Sort By"
+          :options="sortOptions"
+        />
       </div>
-      <UButton v-if="curUser?.role === 'ORGANIZER'" class="ml-auto cursor-pointer" leading-icon="i-heroicons-plus-circle-solid" label="Create Scholarship"
-        to="manage-scholarships/create" />
+      <UButton
+        v-if="curUser?.role === 'ORGANIZER'"
+        class="ml-auto cursor-pointer"
+        leading-icon="i-heroicons-plus-circle-solid"
+        label="Create Scholarship"
+        to="manage-scholarships/create"
+      />
     </CommonPageSection>
     <CommonPageSection inner-class="flex-col">
       <p class="self-start">
         {{ `Showing ${route.hash === '#all' ? all?.length ?? 0 : own?.length ?? 0} / ${curPage.total} rows` }}
       </p>
-      <UTable ref="table" class="overflow-auto w-full" :data="route.hash === '#all' ? all! : own!" :columns="columns">
+      <UTable
+        ref="table"
+        class="overflow-auto w-full"
+        :data="route.hash === '#all' ? all! : own!"
+        :columns="columns"
+      >
         <template #index-cell="{ row }">
           <span class="text-gray-500 font-medium">{{ row.index + 1 }}</span>
         </template>
         <template #icon-cell="{ row }">
           <div v-if="row.original.icon_url">
-            <NuxtImg :src="row.original.icon_url" class="size-8 rounded-lg" quality="50" format="webp" />
+            <NuxtImg
+              :src="row.original.icon_url"
+              class="size-8 rounded-lg"
+              quality="50"
+              format="webp"
+            />
           </div>
         </template>
 
@@ -29,18 +49,36 @@
         </template>
 
         <template #created_at-cell="{ row }">
-          <NuxtTime v-if="row.original.created_at" :datetime="row.original.created_at" month="numeric" day="numeric"
-            year="numeric" hour="numeric" minute="numeric" locale="vi-VN" />
+          <NuxtTime
+            v-if="row.original.created_at"
+            :datetime="row.original.created_at"
+            month="numeric"
+            day="numeric"
+            year="numeric"
+            hour="numeric"
+            minute="numeric"
+            locale="vi-VN"
+          />
         </template>
 
         <template #actions-cell="{ row }">
-          <UDropdownMenu :items="rowActions(row.original)" class="flex justify-end">
-            <UButton icon="i-heroicons-bars-3" color="info" variant="ghost" />
+          <UDropdownMenu
+            :items="rowActions(row.original)"
+            class="flex justify-end"
+          >
+            <UButton
+              icon="i-heroicons-bars-3"
+              color="info"
+              variant="ghost"
+            />
           </UDropdownMenu>
         </template>
       </UTable>
-      <CommonTableTrigger :onLoad="fetchPage" :canLoadMore="route.hash === '#all' ? canLoadMore.all : canLoadMore.own"
-        :is-loading="isLoading" />
+      <CommonTableTrigger
+        :on-load="fetchPage"
+        :can-load-more="route.hash === '#all' ? canLoadMore.all : canLoadMore.own"
+        :is-loading="isLoading"
+      />
     </CommonPageSection>
   </div>
 </template>
@@ -92,7 +130,7 @@ const columns: TableColumn<Tables<'scholarship_list_view'>>[] = [
             : 'i-heroicons-bars-arrow-up'
           : 'i-heroicons-arrows-up-down',
         class: '-mx-2.5',
-        onClick: () => column.toggleSorting(column.getIsSorted() === 'asc')
+        onClick: () => column.toggleSorting(column.getIsSorted() === 'asc'),
       })
     },
     cell: ({ row }) => {
@@ -101,7 +139,7 @@ const columns: TableColumn<Tables<'scholarship_list_view'>>[] = [
   },
   {
     accessorKey: 'created_at',
-        header: ({ column }) => {
+    header: ({ column }) => {
       const isSorted = column.getIsSorted()
 
       return h(UButton, {
@@ -114,7 +152,7 @@ const columns: TableColumn<Tables<'scholarship_list_view'>>[] = [
             : 'i-heroicons-bars-arrow-up'
           : 'i-heroicons-arrows-up-down',
         class: '-mx-2.5',
-        onClick: () => column.toggleSorting(column.getIsSorted() === 'asc')
+        onClick: () => column.toggleSorting(column.getIsSorted() === 'asc'),
       })
     },
   },
@@ -146,7 +184,8 @@ const sortOptions = [
 watch(() => route.hash, async (newHash) => {
   if (newHash === '#own') {
     isFiltering.value = true
-  } else {
+  }
+  else {
     isFiltering.value = false
   }
   await fetchCount()

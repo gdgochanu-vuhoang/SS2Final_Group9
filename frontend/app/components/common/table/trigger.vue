@@ -1,5 +1,8 @@
 <template>
-  <div ref="el" clas="w-full flex flex-row justify-center items-center border-t bg-info-500">
+  <div
+    ref="el"
+    clas="w-full flex flex-row justify-center items-center border-t bg-info-500"
+  >
     <p
       v-if="!isLoading && canLoadMore"
       class="text-3xl"
@@ -17,21 +20,20 @@
 <script lang="ts" setup>
 const props = withDefaults(defineProps<{
   onLoad: () => void
-  canLoadMore: boolean,
+  canLoadMore: boolean
   isLoading: boolean
 }>(), {
-  onLoad: () => {}
+  onLoad: () => {},
 })
 
 const el = useTemplateRef('el')
-const { reset } = useInfiniteScroll(el, 
-  props.onLoad
-,
-{
-  distance: 10,
-  canLoadMore: () => {
-     return props.isLoading ? false : props.canLoadMore
-  }
-}
+const { reset } = useInfiniteScroll(el,
+  props.onLoad,
+  {
+    distance: 10,
+    canLoadMore: () => {
+      return props.isLoading ? false : props.canLoadMore
+    },
+  },
 )
 </script>
